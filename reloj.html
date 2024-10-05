@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Horario de Atención - Materiales El Paraíso</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 50px;
+    }
+    .clock {
+      font-size: 2em;
+      font-weight: bold;
+    }
+    .store-hours {
+      margin-top: 20px;
+      font-size: 1.2em;
+    }
+    .open {
+      color: green;
+    }
+    .closed {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <h1>Materiales El Paraíso</h1>
+  <h2>Horario de Atención</h2>
+
+  <div class="clock" id="clock"></div>
+  <div class="store-hours" id="store-hours"></div>
+
+  <script>
+    function updateClock() {
+      const now = new Date();
+      const hours = now.getHours();
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+      const seconds = now.getSeconds().toString().padStart(2, '0');
+      const timeString = `${hours}:${minutes}:${seconds}`;
+
+      document.getElementById('clock').textContent = `Hora actual: ${timeString}`;
+
+      // Horario de atención
+      const storeOpenHour = 8; // Apertura 8:00 AM
+      const storeCloseHour = 17; // Cierre 5:00 PM
+      const storeStatusElement = document.getElementById('store-hours');
+
+      if (hours >= storeOpenHour && hours < storeCloseHour) {
+        storeStatusElement.textContent = 'Estamos abiertos';
+        storeStatusElement.classList.add('open');
+        storeStatusElement.classList.remove('closed');
+      } else {
+        storeStatusElement.textContent = 'Estamos cerrados';
+        storeStatusElement.classList.add('closed');
+        storeStatusElement.classList.remove('open');
+      }
+    }
+
+    setInterval(updateClock, 1000); // Actualiza el reloj cada segundo
+    updateClock(); // Actualiza inmediatamente al cargar la página
+  </script>
+</body>
+</html>
