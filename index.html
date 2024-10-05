@@ -18,6 +18,11 @@
       margin-top: 20px;
       font-size: 1.2em;
     }
+    .remaining-time {
+      font-size: 1.2em;
+      color: blue;
+      margin-top: 10px;
+    }
     .open {
       color: green;
     }
@@ -32,10 +37,12 @@
 
   <div class="clock" id="clock"></div>
   <div class="store-hours" id="store-hours"></div>
+  <div class="remaining-time" id="remaining-time"></div>
 
   <script>
     function updateClock() {
       const now = new Date();
+      const day = now.getDay(); // 0 = Domingo, 1 = Lunes, ..., 6 = Sábado
       const hours = now.getHours();
       const minutes = now.getMinutes().toString().padStart(2, '0');
       const seconds = now.getSeconds().toString().padStart(2, '0');
@@ -44,18 +51,37 @@
       document.getElementById('clock').textContent = `Hora actual: ${timeString}`;
 
       // Horario de atención
-      const storeOpenHour = 8; // Apertura 8:00 AM
-      const storeCloseHour = 17; // Cierre 5:00 PM
       const storeStatusElement = document.getElementById('store-hours');
+      const remainingTimeElement = document.getElementById('remaining-time');
 
-      if (hours >= storeOpenHour && hours < storeCloseHour) {
-        storeStatusElement.textContent = 'Estamos abiertos';
+      let storeOpenHour, storeCloseHour;
+
+      if (day >= 1 && day <= 5) { // Lunes a Viernes
+        storeOpenHour = 7;
+        storeCloseHour = 17;
+      } else if (day === 6) { // Sábado
+        storeOpenHour = 7;
+        storeCloseHour = 14;
+      } else { // Domingo
+        storeOpenHour = null;
+        storeCloseHour = null;
+      }
+
+      if (storeOpenHour !== null && hours >= storeOpenHour && hours < storeCloseHour) {
+        storeStatusElement.textContent = 'Estamos disponibles';
         storeStatusElement.classList.add('open');
         storeStatusElement.classList.remove('closed');
+
+        // Calcular el tiempo restante para el cierre
+        const remainingHours = storeCloseHour - hours - 1;
+        const remainingMinutes = 59 - now.getMinutes();
+        const remainingSeconds = 59 - now.getSeconds();
+        remainingTimeElement.textContent = `Tiempo restante para visitarnos hoy: ${remainingHours} horas, ${remainingMinutes} minutos y ${remainingSeconds} segundos.`;
       } else {
-        storeStatusElement.textContent = 'Estamos cerrados';
+        storeStatusElement.textContent = 'Fuera de horario';
         storeStatusElement.classList.add('closed');
         storeStatusElement.classList.remove('open');
+        remainingTimeElement.textContent = '';
       }
     }
 
@@ -64,3 +90,4 @@
   </script>
 </body>
 </html>
+
