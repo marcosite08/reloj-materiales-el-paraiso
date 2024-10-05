@@ -14,7 +14,7 @@
       font-size: 2em;
       font-weight: bold;
     }
-    .store-hours {
+    .store-hours, .store-schedule {
       margin-top: 20px;
       font-size: 1.2em;
     }
@@ -34,6 +34,12 @@
 <body>
   <h1>Materiales El Paraíso</h1>
   <h2>Horario de Atención</h2>
+
+  <div class="store-schedule">
+    <p>Lunes a Viernes: 7:00 a.m. - 2:00 p.m.</p>
+    <p>Sábado: 7:00 a.m. - 2:00 p.m.</p>
+    <p>Domingo: Cerrado</p>
+  </div>
 
   <div class="clock" id="clock"></div>
   <div class="store-hours" id="store-hours"></div>
@@ -58,7 +64,7 @@
 
       if (day >= 1 && day <= 5) { // Lunes a Viernes
         storeOpenHour = 7;
-        storeCloseHour = 17;
+        storeCloseHour = 14;
       } else if (day === 6) { // Sábado
         storeOpenHour = 7;
         storeCloseHour = 14;
@@ -90,4 +96,3 @@
   </script>
 </body>
 </html>
-
