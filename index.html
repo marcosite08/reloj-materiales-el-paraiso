@@ -18,7 +18,7 @@
       margin-top: 20px;
       font-size: 1.2em;
     }
-    .remaining-time {
+    .remaining-time, .next-opening {
       font-size: 1.2em;
       color: blue;
       margin-top: 10px;
@@ -44,6 +44,7 @@
   <div class="clock" id="clock"></div>
   <div class="store-hours" id="store-hours"></div>
   <div class="remaining-time" id="remaining-time"></div>
+  <div class="next-opening" id="next-opening"></div>
 
   <script>
     function updateClock() {
@@ -59,6 +60,7 @@
       // Horario de atención
       const storeStatusElement = document.getElementById('store-hours');
       const remainingTimeElement = document.getElementById('remaining-time');
+      const nextOpeningElement = document.getElementById('next-opening');
 
       let storeOpenHour, storeCloseHour;
 
@@ -77,6 +79,7 @@
         storeStatusElement.textContent = 'Estamos disponibles';
         storeStatusElement.classList.add('open');
         storeStatusElement.classList.remove('closed');
+        nextOpeningElement.textContent = '';
 
         // Calcular el tiempo restante para el cierre
         const remainingHours = storeCloseHour - hours - 1;
@@ -88,6 +91,30 @@
         storeStatusElement.classList.add('closed');
         storeStatusElement.classList.remove('open');
         remainingTimeElement.textContent = '';
+
+        // Calcular el tiempo para la próxima apertura
+        let nextOpenDay, nextOpenHour = 7;
+
+        if (day === 6) { // Si hoy es Sábado, abrimos el Lunes
+          nextOpenDay = 1; // Lunes
+        } else if (day === 0) { // Si hoy es Domingo, abrimos el Lunes
+          nextOpenDay = 1; // Lunes
+        } else if (hours >= storeCloseHour) { // Si ya cerramos hoy, abrimos el siguiente día hábil
+          nextOpenDay = (day === 5) ? 6 : day + 1; // Si es Viernes, el próximo es Sábado; si no, el siguiente día
+        } else { // Antes de la apertura de hoy
+          nextOpenDay = day;
+        }
+
+        let nextOpeningTime = new Date(now);
+        nextOpeningTime.setDate(now.getDate() + (nextOpenDay - day + (nextOpenDay < day ? 7 : 0)));
+        nextOpeningTime.setHours(nextOpenHour, 0, 0, 0);
+
+        const diff = nextOpeningTime - now;
+        const diffHours = Math.floor(diff / (1000 * 60 * 60));
+        const diffMinutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const diffSeconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        nextOpeningElement.textContent = `Abrimos dentro de: ${diffHours} horas, ${diffMinutes} minutos y ${diffSeconds} segundos para atenderle con gusto.`;
       }
     }
 
