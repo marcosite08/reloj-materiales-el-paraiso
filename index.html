@@ -10,18 +10,19 @@
       text-align: center;
       margin-top: 50px;
     }
+    .general-spacing {
+      margin-top: 2px; /* Cambia este valor para ajustar todos los márgenes verticales */
+    }
     .clock {
       font-size: 2em;
       font-weight: bold;
     }
-    .store-hours, .store-schedule {
-      margin-top: 20px;
+    .store-schedule {
       font-size: 1.2em;
     }
     .remaining-time, .next-opening {
       font-size: 1.2em;
       color: blue;
-      margin-top: 10px;
     }
     .open {
       color: green;
@@ -32,19 +33,19 @@
   </style>
 </head>
 <body>
-  <h1>Materiales El Paraíso</h1>
-  <h2>Horario de Atención</h2>
+  <h1 class="general-spacing">Materiales El Paraíso</h1>
+  <h2 class="general-spacing">Horario de Atención</h2>
 
-  <div class="store-schedule">
+  <div class="store-schedule general-spacing">
     <p>Lunes a Viernes:<br>7:00 a.m. - 5:00 p.m.</p>
     <p>Sábado:<br>7:00 a.m. - 2:00 p.m.</p>
     <p>Domingo: Cerrado</p>
   </div>
 
-  <div class="clock" id="clock"></div>
-  <div class="store-hours" id="store-hours"></div>
-  <div class="remaining-time" id="remaining-time"></div>
-  <div class="next-opening" id="next-opening"></div>
+  <div class="clock general-spacing" id="clock"></div>
+  <div class="store-hours general-spacing" id="store-hours"></div>
+  <div class="remaining-time general-spacing" id="remaining-time"></div>
+  <div class="next-opening general-spacing" id="next-opening"></div>
 
   <script>
     function updateClock() {
@@ -128,3 +129,4 @@
   </script>
 </body>
 </html>
+
