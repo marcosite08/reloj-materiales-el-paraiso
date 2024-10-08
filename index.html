@@ -36,8 +36,8 @@
   <h2>Horario de Atención</h2>
 
   <div class="store-schedule">
-    <p>Lunes a Viernes: 7:00 a.m. - 5:00 p.m.</p>
-    <p>Sábado: 7:00 a.m. - 2:00 p.m.</p>
+    <p>Lunes a Viernes:<br>7:00 a.m. - 5:00 p.m.</p>
+    <p>Sábado:<br>7:00 a.m. - 2:00 p.m.</p>
     <p>Domingo: Cerrado</p>
   </div>
 
@@ -54,10 +54,13 @@
       const minutes = now.getMinutes().toString().padStart(2, '0');
       const seconds = now.getSeconds().toString().padStart(2, '0');
       const amPm = hours >= 12 ? 'PM' : 'AM';
+      const currentHours = hours;
       hours = hours % 12 || 12; // Convertir a formato de 12 horas y manejar el caso de medianoche
-      const timeString = `${hours}:${minutes}:${seconds} ${amPm}`;
+      const daysOfWeek = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+      const dayString = daysOfWeek[day];
+      const timeString = `${dayString}, ${hours}:${minutes}:${seconds} ${amPm}`;
 
-      document.getElementById('clock').textContent = `Hora actual: ${timeString}`;
+      document.getElementById('clock').innerHTML = `Hora actual:<br>${timeString}`;
 
       // Horario de atención
       const storeStatusElement = document.getElementById('store-hours');
@@ -77,14 +80,14 @@
         storeCloseHour = null;
       }
 
-      if (storeOpenHour !== null && hours >= storeOpenHour && hours < storeCloseHour) {
+      if (storeOpenHour !== null && currentHours >= storeOpenHour && currentHours < storeCloseHour) {
         storeStatusElement.textContent = 'Estamos disponibles';
         storeStatusElement.classList.add('open');
         storeStatusElement.classList.remove('closed');
         nextOpeningElement.textContent = '';
 
         // Calcular el tiempo restante para el cierre
-        const remainingHours = storeCloseHour - hours - 1;
+        const remainingHours = storeCloseHour - currentHours - 1;
         const remainingMinutes = 59 - now.getMinutes();
         const remainingSeconds = 59 - now.getSeconds();
         remainingTimeElement.textContent = `Cerramos en: ${remainingHours}:${remainingMinutes}:${remainingSeconds}`;
@@ -101,7 +104,7 @@
           nextOpenDay = 1; // Lunes
         } else if (day === 0) { // Si hoy es Domingo, abrimos el Lunes
           nextOpenDay = 1; // Lunes
-        } else if (hours >= storeCloseHour) { // Si ya cerramos hoy, abrimos el siguiente día hábil
+        } else if (currentHours >= storeCloseHour) { // Si ya cerramos hoy, abrimos el siguiente día hábil
           nextOpenDay = (day === 5) ? 6 : day + 1; // Si es Viernes, el próximo es Sábado; si no, el siguiente día
         } else { // Antes de la apertura de hoy
           nextOpenDay = day;
